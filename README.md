@@ -1,2 +1,2 @@
-# klappen-skitracker
+# Kläppen SkiTracker
 Unofficial SkiTracker for Kläppen Ski Resort with manual and GPS-based ride tracking, stats, and unlockables. Community-made.
