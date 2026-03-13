@@ -14,7 +14,7 @@ Det här repot innehåller i praktiken tre delar:
 
 - `index.html` + `app.js`: huvudappen för manuell registrering, grupphantering, statistik och kartval av backar
 - `gps/`: nyare GPS-läge för att spela in ett pass och föra tillbaka rutten till huvudappen
-- `gps-test/` och `gps-recorder/`: verktyg för GPS-definitioner, analys, testning och äldre inspelningsflöden
+- `gps-test/` och `gps-recorder/`: verktyg för GPS-definitioner, analys, testning och admininspelning av backar och liftar
 
 ## Funktioner
 
@@ -127,9 +127,9 @@ Tips:
 - klassificera punkter och rutter
 - spara testspår
 
-### GPS Recorder (legacy)
+### GPS Recorder
 
-`/gps-recorder/` är ett äldre inspelningsverktyg för att spela in specifika backar eller liftar för linjedefinitioner.
+`/gps-recorder/` är adminverktyget för att spela in specifika backar eller liftar när definitioner behöver kompletteras eller ersättas.
 
 ## Tester
 
