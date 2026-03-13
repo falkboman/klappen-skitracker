@@ -1,0 +1,26 @@
+[
+    {
+        "id": "grp_dc7abe84d643",
+        "code": "D8VGH7",
+        "name": "FalkBoman Group",
+        "persons": [
+            "Ebba",
+            "Eric",
+            "Jan-Fredrik",
+            "Linda",
+            "Stefan"
+        ],
+        "createdAt": "2026-03-10T07:44:10+00:00",
+        "updatedAt": "2026-03-10T08:51:00+00:00"
+    },
+    {
+        "id": "grp_bf16f10bc6c8",
+        "code": "67WHEX",
+        "name": "Powder hunters",
+        "persons": [
+            "Mimmi"
+        ],
+        "createdAt": "2026-03-10T10:17:57+01:00",
+        "updatedAt": "2026-03-10T10:17:57+01:00"
+    }
+]

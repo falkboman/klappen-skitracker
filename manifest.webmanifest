@@ -1,0 +1,28 @@
+{
+  "name": "Kläppen SkiTracker",
+  "short_name": "Kläppen SkiTracker",
+  "description": "Spåra skidåkning, analysera rutter och använd GPS-läge i Kläppen Ski Tracker.",
+  "start_url": "/index.html",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#EAF2FB",
+  "theme_color": "#103D69",
+  "icons": [
+    {
+      "src": "/IMG/pwa/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/IMG/pwa/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/IMG/pwa/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

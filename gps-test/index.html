@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="sv">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GPS Run Analyzer</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="map-stage">
+        <div id="runsMap" class="map-box"></div>
+      </section>
+
+      <aside class="side-panel">
+        <header class="panel-head">
+          <h1>Run Analyzer</h1>
+          <p class="status"><a href="../gps-recorder/index.html">Recorder</a></p>
+        </header>
+
+        <section class="panel-card">
+          <h2>Välj Spår</h2>
+          <div class="controls">
+            <label class="file-label">
+              Ladda GeoJSON-fil
+              <input id="trackInput" type="file" accept=".json,.geojson,application/geo+json,application/json" />
+            </label>
+            <label>
+              Sparade spår
+              <select id="savedTrackSelect"></select>
+            </label>
+            <div class="btn-row">
+              <button id="reloadTracksBtn" type="button">Uppdatera</button>
+              <button id="loadSavedBtn" type="button">Ladda vald</button>
+              <button id="loadLatestBtn" type="button">Ladda senaste</button>
+            </div>
+            <button id="classifyBtn" type="button" disabled>Klassificera spår</button>
+          </div>
+
+          <p id="trackStatus" class="status"></p>
+          <p id="mapStatus" class="status"></p>
+
+          <div class="metrics">
+            <span>Fil: <strong id="trackName">-</strong></span>
+            <span>Punkter: <strong id="trackPointCount">-</strong></span>
+            <span>Klassade: <strong id="classifiedPointCount">-</strong></span>
+            <span>Descent: <strong id="descentStat">-</strong></span>
+            <span>Lift: <strong id="liftStat">-</strong></span>
+            <span>Idle/Unknown: <strong id="unknownStat">-</strong></span>
+            <span>Snitt conf: <strong id="avgConfidenceStat">-</strong></span>
+          </div>
+
+          <div id="guessesText" class="summary-wrap"></div>
+        </section>
+
+        <section class="panel-card panel-card-grow">
+          <h2>Segmentgissning</h2>
+          <p class="hint">Tryck på segment för att markera motsvarande del i kartan med prickar och index.</p>
+          <div id="segmentsList" class="segments"></div>
+        </section>
+
+        <section class="panel-card panel-card-grow">
+          <h2>Punktdebug</h2>
+          <div id="pointRows" class="points"></div>
+        </section>
+      </aside>
+    </main>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

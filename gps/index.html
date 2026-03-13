@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="sv">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="theme-color" content="#103D69" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Kläppen SkiTracker" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <title>Kläppen GPS-läge</title>
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="icon" type="image/png" sizes="96x96" href="/IMG/pwa/favicon-96x96.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/IMG/pwa/apple-touch-icon.png" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              klappen: {
+                dark: '#103D69',
+                mid: '#1E4F80',
+                light: '#EAF2FB',
+                accent: '#2E6EA8'
+              }
+            },
+            boxShadow: {
+              card: '0 10px 30px rgba(16, 61, 105, 0.12)'
+            }
+          }
+        }
+      };
+    </script>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  </head>
+  <body class="bg-slate-100 text-slate-900">
+    <div id="edgeSwipeGuardLeft" class="edge-swipe-guard edge-swipe-guard-left" aria-hidden="true"></div>
+    <div id="edgeSwipeGuardRight" class="edge-swipe-guard edge-swipe-guard-right" aria-hidden="true"></div>
+    <div class="page-shell">
+      <div class="page-top-bg" aria-hidden="true"></div>
+      <div class="relative z-10">
+        <header class="bg-white/90 backdrop-blur border-b border-blue-100 sticky top-0 z-20">
+          <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
+            <img src="../IMG/logo_top.svg" alt="Kläppen" class="h-10 w-auto" />
+            <div class="flex items-center gap-2">
+              <p class="text-sm font-semibold text-klappen-dark hidden sm:block">Ski Tracker</p>
+              <a href="../index.html" class="inline-flex items-center gap-2 rounded-xl border border-blue-200 bg-blue-50 px-3 py-2 text-xs sm:text-sm font-semibold text-klappen-dark hover:bg-blue-100 transition">
+                <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+                <span>Till startsidan</span>
+              </a>
+            </div>
+          </div>
+        </header>
+
+        <main class="relative z-10">
+          <section class="max-w-4xl mx-auto px-4 pt-8 sm:pt-10">
+            <div class="hero-register-wrap">
+              <section class="gps-hero-card w-full mb-8 sm:mb-0 bg-white rounded-2xl p-4 shadow-card border border-blue-100">
+                <div class="gps-hero-head">
+                  <div class="gps-hero-badge" aria-hidden="true">
+                    <i class="fa-solid fa-crosshairs gps-hero-icon"></i>
+                  </div>
+                  <h1 class="gps-hero-title">GPS-läge</h1>
+                  <p class="text-sm text-slate-600 mt-1">Spela in ett helt pass, analysera direkt och godkänn rutten. Spara åk görs sedan i startsidan.</p>
+                </div>
+
+                <div class="mt-4 gps-controls">
+                  <button id="recordToggleBtn" type="button" class="gps-btn gps-btn-primary">
+                    <i class="fa-solid fa-location-dot gps-btn-icon" aria-hidden="true"></i>
+                    <span>Starta GPS-spårning</span>
+                  </button>
+                  <div class="gps-secondary-controls">
+                    <button id="recordPauseBtn" type="button" class="gps-btn gps-btn-secondary" disabled>
+                      <i class="fa-solid fa-pause" aria-hidden="true"></i>
+                      <span>Pausa</span>
+                    </button>
+                    <button id="recordSoundBtn" type="button" class="gps-btn gps-btn-secondary" aria-pressed="true">
+                      <i class="fa-solid fa-volume-high" aria-hidden="true"></i>
+                      <span>Ljud: På</span>
+                    </button>
+                  </div>
+                </div>
+
+                <section id="debugCard" class="mt-4 hidden rounded-xl border border-amber-200 bg-amber-50 p-3">
+                  <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                      <h2 class="text-sm font-bold uppercase tracking-wide text-amber-900">Debugläge</h2>
+                      <p id="debugMeta" class="text-sm text-amber-800 mt-1">Laddar testspår...</p>
+                    </div>
+                    <a
+                      id="debugSampleLink"
+                      href="?debugTrack=back_7_Kl_ppen_Junior_Snowpark_20260312_112305_ddd2b8.geojson"
+                      class="inline-flex items-center justify-center rounded-xl border border-amber-300 bg-white px-3 py-2 text-sm font-semibold text-amber-900 hover:bg-amber-100"
+                    >
+                      Ladda Junior Snowpark-test
+                    </a>
+                  </div>
+                </section>
+
+                <p id="recordStatus" class="gps-status text-sm mt-3 text-slate-600 hidden"></p>
+                <div class="mt-3 gps-stats" aria-label="GPS-status">
+                  <span class="gps-stat-pill"><i class="fa-regular fa-clock" aria-hidden="true"></i><strong id="recordDuration">00:00</strong></span>
+                  <span class="gps-stat-pill"><i class="fa-solid fa-location-crosshairs" aria-hidden="true"></i><strong id="recordPointCount">0</strong></span>
+                  <span class="gps-stat-pill"><i class="fa-solid fa-satellite-dish" aria-hidden="true"></i><strong id="recordAccuracy">-</strong></span>
+                  <span class="gps-stat-pill"><i class="fa-solid fa-person-skiing" aria-hidden="true"></i><strong id="suggestedBackCount">0</strong></span>
+                </div>
+
+                <section id="analysisCard" class="mt-4 hidden rounded-xl border border-blue-100 bg-blue-50/50 p-3">
+                  <h2 class="text-lg font-bold text-klappen-dark inline-flex items-center gap-2"><i class="fa-solid fa-person-skiing" aria-hidden="true"></i> Föreslagna backar</h2>
+                  <p id="analysisMeta" class="text-sm text-slate-600 mt-1"></p>
+                  <div id="analysisLoading" class="analysis-loading hidden" aria-live="polite" aria-busy="true">
+                    <i class="fa-solid fa-circle-notch fa-spin" aria-hidden="true"></i>
+                    <span>Analyserar spåret...</span>
+                  </div>
+
+                  <div id="suggestionsList" class="mt-3 space-y-2"></div>
+                  <div class="mt-3">
+                    <button id="approveRouteBtn" type="button" class="w-full rounded-xl bg-emerald-600 px-3 py-3 text-sm font-semibold text-white hover:bg-emerald-700 inline-flex items-center justify-center gap-2"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i> Godkänn rutt</button>
+                  </div>
+                  <details class="mt-3">
+                    <summary class="cursor-pointer text-sm font-semibold text-klappen-dark">Visa hela ruttförslaget (inkl liftar)</summary>
+                    <ol id="routeList" class="mt-2 list-decimal pl-5 text-sm text-slate-700 space-y-1"></ol>
+                  </details>
+                </section>
+              </section>
+            </div>
+          </section>
+
+          <div class="max-w-4xl mx-auto px-4 pb-4 space-y-4">
+            <section class="bg-white rounded-2xl p-4 shadow-card border border-blue-100 relative z-10 -mt-2 sm:-mt-20">
+              <h2 class="text-lg font-bold text-klappen-dark inline-flex items-center gap-2"><i class="fa-regular fa-map" aria-hidden="true"></i> Karta</h2>
+              <p id="mapStatus" class="text-sm text-slate-600 mt-1"></p>
+              <div id="runsMap" class="map-box mt-3"></div>
+            </section>
+          </div>
+        </main>
+
+        <footer class="mt-6 bg-klappen-dark text-white pt-6">
+          <div class="max-w-4xl mx-auto px-4 pb-6 flex flex-col items-center gap-3">
+            <img src="../IMG/logo_bottom.svg" alt="Kläppen footer" class="h-16 w-auto" />
+            <p class="text-xs text-blue-100">Kläppen Ski Tracker v1.3</p>
+          </div>
+          <div class="w-full h-[62px]" style="background-color: #103d69; background-image: url('../IMG/ribbon.svg'); background-repeat: repeat-x; background-size: auto 62px; background-position: center bottom;" aria-hidden="true"></div>
+          <div class="w-full h-14 bg-klappen-dark flex items-center justify-center">
+            <button id="installHintBtn" type="button" class="install-hint-btn">Rekommenderas i installerat läge. Klicka för instruktion.</button>
+          </div>
+        </footer>
+      </div>
+    </div>
+
+    <div id="installHintModal" class="hidden fixed inset-0 z-50 bg-slate-950/65 px-4 py-6 flex items-center justify-center">
+      <div class="relative w-full max-w-sm rounded-2xl bg-white p-5 text-center shadow-2xl">
+        <button
+          id="installHintCloseBtn"
+          type="button"
+          class="absolute right-3 top-3 inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-500 hover:bg-slate-100 hover:text-slate-700"
+          aria-label="Stäng"
+        >
+          <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+        </button>
+        <h2 class="text-lg font-bold text-klappen-dark">Installerat läge</h2>
+        <p class="mt-3 text-sm leading-6 text-slate-600">
+          Öppna sidan från hemskärmen för stabilare GPS och enklare användning i backen.
+          I Safari: dela och välj <strong>Lägg till på hemskärmen</strong>.
+          I Chrome: öppna menyn och välj <strong>Installera app</strong>.
+        </p>
+      </div>
+    </div>
+
+    <div id="safetyModal" class="hidden fixed inset-0 z-50 bg-slate-900/70 p-3 sm:p-6 overflow-y-auto overscroll-contain flex items-center justify-center">
+      <div class="mx-auto my-0 max-w-xl rounded-2xl bg-white shadow-2xl overflow-hidden max-h-[calc(100dvh-1.5rem)] sm:max-h-[calc(100dvh-3rem)] flex flex-col">
+        <div class="border-b border-slate-200 p-4 relative">
+          <button id="safetyCloseBtn" type="button" class="absolute right-3 top-3 rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-600 hover:bg-slate-100 hover:text-slate-800 inline-flex items-center justify-center" aria-label="Stäng">
+            <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+          </button>
+          <p class="text-2xl font-bold text-klappen-dark inline-flex items-center gap-2">
+            <i class="fa-solid fa-crosshairs text-klappen-accent" aria-hidden="true"></i>
+            GPS-kontroll
+          </p>
+          <p class="text-base text-slate-700 mt-2">Bekräfta alla tre punkterna innan GPS-spårning startar.</p>
+        </div>
+        <div class="p-4 bg-gradient-to-b from-blue-50 via-white to-slate-50 space-y-4 overflow-y-auto">
+          <div class="grid grid-cols-1 gap-2">
+            <button id="safetyActionLocationBtn" type="button" class="safety-action-btn" aria-pressed="false">
+              <span class="safety-switch" aria-hidden="true"><span class="safety-switch-dot"></span></span>
+              <span class="safety-action-copy">
+                <strong>Platsbehörighet + exakt position</strong>
+                <span>Tryck för att testa att webbläsaren får din exakta position.</span>
+              </span>
+            </button>
+            <button id="safetyActionAutolockBtn" type="button" class="safety-action-btn" aria-pressed="false">
+              <span class="safety-switch" aria-hidden="true"><span class="safety-switch-dot"></span></span>
+              <span class="safety-action-copy">
+                <strong>Autolås avstängt</strong>
+                <span>Jag har stängt av autolås i mobilen.</span>
+              </span>
+            </button>
+            <button id="safetyActionScreenBtn" type="button" class="safety-action-btn" aria-pressed="false">
+              <span class="safety-switch" aria-hidden="true"><span class="safety-switch-dot"></span></span>
+              <span class="safety-action-copy">
+                <strong>Sidan hålls öppen</strong>
+                <span>Jag lämnar sidan uppe tills inspelningen stoppas.</span>
+              </span>
+            </button>
+          </div>
+          <p id="safetyLocationHint" class="text-sm text-slate-600">Status: Ej testad ännu.</p>
+          <div class="pt-1">
+            <button id="safetyConfirmBtn" type="button" class="w-full rounded-xl bg-klappen-mid px-4 py-3.5 text-base font-semibold text-white hover:bg-klappen-dark disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center justify-center gap-2" disabled><i class="fa-solid fa-person-skiing" aria-hidden="true"></i> Spela in Åkning</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="app.js"></script>
+    <script>
+      (() => {
+        const openBtn = document.getElementById('installHintBtn');
+        const modal = document.getElementById('installHintModal');
+        const closeBtn = document.getElementById('installHintCloseBtn');
+        if (!openBtn || !modal || !closeBtn) return;
+
+        const closeModal = () => modal.classList.add('hidden');
+        const openModal = () => modal.classList.remove('hidden');
+
+        openBtn.addEventListener('click', openModal);
+        closeBtn.addEventListener('click', closeModal);
+        modal.addEventListener('click', (event) => {
+          if (event.target === modal) closeModal();
+        });
+        document.addEventListener('keydown', (event) => {
+          if (event.key === 'Escape') closeModal();
+        });
+      })();
+    </script>
+  </body>
+</html>

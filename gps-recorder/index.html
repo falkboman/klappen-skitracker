@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="sv">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark" />
+    <title>GPS Recorder (Legacy)</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  </head>
+  <body>
+    <main class="simple-wrap">
+      <section class="simple-card">
+        <h1>Kläppen Recorder</h1>
+        <p class="simple-help">Spela in specifik backe eller lift för linjedefinitioner.</p>
+        <p class="simple-help">Tips: stäng av autolås under inspelning.</p>
+
+        <div class="simple-controls">
+          <label>
+            <span id="recordTargetLabel">Vilken backe</span>
+            <div class="target-type-switch" role="group" aria-label="Välj typ">
+              <button id="recordTypeBackBtn" type="button" class="target-type-btn is-active" aria-pressed="true">Backe</button>
+              <button id="recordTypeLiftBtn" type="button" class="target-type-btn" aria-pressed="false">Lift</button>
+            </div>
+            <select id="recordBackSelect"></select>
+          </label>
+
+          <label>
+            Vilken bredd (meter)
+            <input id="recordWidthInput" type="number" min="5" max="100" step="1" value="25" />
+          </label>
+        </div>
+
+        <div class="record-btn-wrap">
+          <button id="recordToggleBtn" type="button" class="record-btn">● Spela in</button>
+          <button id="recordPauseBtn" type="button" class="pause-btn" disabled>Pausa</button>
+          <button id="recordSoundBtn" type="button" class="sound-btn" aria-pressed="true">Ljud: På</button>
+          <button id="saveTrackBtn" type="button" class="save-track-btn" disabled>Spara åk-fil</button>
+          <button id="deleteLatestBtn" type="button" class="delete-latest-btn" disabled>Ta bort senaste inspelning</button>
+        </div>
+
+        <p id="recordStatus" class="simple-status"></p>
+        <div class="simple-metrics">
+          <span>Punkter: <strong id="recordPointCount">0</strong></span>
+          <span>Senaste precision: <strong id="recordAccuracy">-</strong></span>
+        </div>
+      </section>
+
+      <section class="simple-card">
+        <h2>Karta (backar + liftar + runs)</h2>
+        <p id="mapStatus" class="simple-status"></p>
+        <div id="runsMap" class="map-box"></div>
+      </section>
+    </main>
+
+    <footer class="simple-footer">
+      <div class="simple-footer-ribbon" aria-hidden="true"></div>
+      <div class="simple-footer-bottom">
+        <button id="installHintBtn" type="button" class="install-hint-btn">Rekommenderas i installerat läge. Klicka för instruktion.</button>
+      </div>
+    </footer>
+
+    <div id="installHintModal" class="install-modal hidden" aria-hidden="true">
+      <div class="install-modal-card" role="dialog" aria-modal="true" aria-labelledby="installHintTitle">
+        <button id="installHintCloseBtn" type="button" class="install-modal-close" aria-label="Stäng">×</button>
+        <h2 id="installHintTitle">Installerat läge</h2>
+        <p>
+          Öppna sidan från hemskärmen för stabilare GPS och enklare användning i backen.
+          I Safari: dela och välj <strong>Lägg till på hemskärmen</strong>.
+          I Chrome: öppna menyn och välj <strong>Installera app</strong>.
+        </p>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="app.js?v=20260313-1"></script>
+    <script>
+      (() => {
+        const openBtn = document.getElementById('installHintBtn');
+        const modal = document.getElementById('installHintModal');
+        const closeBtn = document.getElementById('installHintCloseBtn');
+        if (!openBtn || !modal || !closeBtn) return;
+
+        const closeModal = () => {
+          modal.classList.add('hidden');
+          modal.setAttribute('aria-hidden', 'true');
+        };
+        const openModal = () => {
+          modal.classList.remove('hidden');
+          modal.setAttribute('aria-hidden', 'false');
+        };
+
+        openBtn.addEventListener('click', openModal);
+        closeBtn.addEventListener('click', closeModal);
+        modal.addEventListener('click', (event) => {
+          if (event.target === modal) closeModal();
+        });
+        document.addEventListener('keydown', (event) => {
+          if (event.key === 'Escape') closeModal();
+        });
+      })();
+    </script>
+  </body>
+</html>

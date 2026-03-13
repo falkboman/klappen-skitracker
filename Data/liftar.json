@@ -1,0 +1,156 @@
+[
+    {
+        "uid": "Q",
+        "id": "Q",
+        "gpsKey": "Q",
+        "namn": "Gondol Sälen",
+        "langdMeter": 1404
+    },
+    {
+        "uid": "D-norr",
+        "id": "D",
+        "gpsKey": "D",
+        "namn": "Beckasin Norr",
+        "langdMeter": 638
+    },
+    {
+        "uid": "D-syd",
+        "id": "D",
+        "gpsKey": "D",
+        "namn": "Beckasin Syd",
+        "langdMeter": 638
+    },
+    {
+        "uid": "K-norr",
+        "id": "K",
+        "gpsKey": "K",
+        "namn": "Falken Norr",
+        "langdMeter": 858
+    },
+    {
+        "uid": "B",
+        "id": "B",
+        "gpsKey": "B",
+        "namn": "Gladan",
+        "langdMeter": 1238
+    },
+    {
+        "uid": "K-syd",
+        "id": "K",
+        "gpsKey": "K",
+        "namn": "Falken Syd",
+        "langdMeter": 858
+    },
+    {
+        "uid": "A",
+        "id": "A",
+        "gpsKey": "A",
+        "namn": "Örnen",
+        "langdMeter": 367
+    },
+    {
+        "uid": "J",
+        "id": "J",
+        "gpsKey": "J",
+        "namn": "Uven",
+        "langdMeter": 433
+    },
+    {
+        "uid": "C",
+        "id": "C",
+        "gpsKey": "C",
+        "namn": "Lommen",
+        "langdMeter": 335
+    },
+    {
+        "uid": "E-norr",
+        "id": "E",
+        "gpsKey": "E",
+        "namn": "Ripan Norr",
+        "langdMeter": 376
+    },
+    {
+        "uid": "E-syd",
+        "id": "E",
+        "gpsKey": "E",
+        "namn": "Ripan Syd",
+        "langdMeter": 376
+    },
+    {
+        "uid": "F",
+        "id": "F",
+        "gpsKey": "F",
+        "namn": "Sparven",
+        "langdMeter": 228
+    },
+    {
+        "uid": "G",
+        "id": "G",
+        "gpsKey": "G",
+        "namn": "Duvan",
+        "langdMeter": 165
+    },
+    {
+        "uid": "H",
+        "id": "H",
+        "gpsKey": "H",
+        "namn": "Ugglan",
+        "langdMeter": 455
+    },
+    {
+        "uid": "I",
+        "id": "I",
+        "gpsKey": "I",
+        "namn": "Höken",
+        "langdMeter": 462
+    },
+    {
+        "uid": "P",
+        "id": "P",
+        "gpsKey": "P",
+        "namn": "Tjädern",
+        "langdMeter": 430
+    },
+    {
+        "uid": "M-norr",
+        "id": "M",
+        "gpsKey": "M",
+        "namn": "Domherren Norr",
+        "langdMeter": 115
+    },
+    {
+        "uid": "M-syd",
+        "id": "M",
+        "gpsKey": "M",
+        "namn": "Domherren Syd",
+        "langdMeter": 115
+    },
+    {
+        "uid": "O",
+        "id": "O",
+        "gpsKey": "O",
+        "namn": "Blåmesen",
+        "langdMeter": 20
+    },
+    {
+        "uid": "R",
+        "id": "R",
+        "gpsKey": "R",
+        "namn": "Ärlan",
+        "langdMeter": 371
+    },
+    {
+        "uid": "L",
+        "id": "L",
+        "gpsKey": "L",
+        "namn": "Orren",
+        "langdMeter": 650
+    },
+    {
+        "uid": "N",
+        "id": "N",
+        "gpsKey": "N",
+        "namn": "Rödhaken",
+        "langdMeter": 140
+    }
+]

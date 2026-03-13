@@ -1,0 +1,218 @@
+[
+    {
+        "nummer": 1,
+        "namn": "Skidskolebacken",
+        "farg": "grön",
+        "langdMeter": 183
+    },
+    {
+        "nummer": 2,
+        "namn": "Barnbacken",
+        "farg": "grön",
+        "langdMeter": 209
+    },
+    {
+        "nummer": 3,
+        "namn": "Harlyckan",
+        "farg": "grön",
+        "langdMeter": 362
+    },
+    {
+        "nummer": 4,
+        "namn": "Björnidet",
+        "farg": "grön",
+        "langdMeter": 344
+    },
+    {
+        "nummer": 5,
+        "namn": "Trollriket nord",
+        "farg": "grön",
+        "langdMeter": 284
+    },
+    {
+        "nummer": 6,
+        "namn": "Trollriket syd",
+        "farg": "grön",
+        "langdMeter": 183
+    },
+    {
+        "nummer": 7,
+        "namn": "Kläppen Junior Snowpark",
+        "farg": "grön",
+        "langdMeter": 439
+    },
+    {
+        "nummer": 8,
+        "namn": "Trollslope",
+        "farg": "grön",
+        "langdMeter": 345
+    },
+    {
+        "nummer": 9,
+        "namn": "Skogsmusslingan",
+        "farg": "grön",
+        "langdMeter": 443
+    },
+    {
+        "nummer": 10,
+        "namn": "Skogssniglen",
+        "farg": "grön",
+        "langdMeter": 366
+    },
+    {
+        "nummer": 11,
+        "namn": "Rådjursstigen",
+        "farg": "grön",
+        "langdMeter": 1496
+    },
+    {
+        "nummer": 12,
+        "namn": "Lämmeltåget",
+        "farg": "grön",
+        "langdMeter": 2840
+    },
+    {
+        "nummer": 13,
+        "namn": "Hermelinsvängen",
+        "farg": "blå",
+        "langdMeter": 513
+    },
+    {
+        "nummer": 14,
+        "namn": "Hjorthornet",
+        "farg": "grön",
+        "langdMeter": 440
+    },
+    {
+        "nummer": 15,
+        "namn": "Mullvadsgången",
+        "farg": "grön",
+        "langdMeter": 544
+    },
+    {
+        "nummer": 16,
+        "namn": "Myrstigen",
+        "farg": "grön",
+        "langdMeter": 274
+    },
+    {
+        "nummer": 17,
+        "namn": "Grävlingsgrytet",
+        "farg": "grön",
+        "langdMeter": 416
+    },
+    {
+        "nummer": 18,
+        "namn": "Järvlunken",
+        "farg": "blå",
+        "langdMeter": 418
+    },
+    {
+        "nummer": 19,
+        "namn": "Utterleken",
+        "farg": "blå",
+        "langdMeter": 351
+    },
+    {
+        "nummer": 20,
+        "namn": "Humlan",
+        "farg": "grön",
+        "langdMeter": 384
+    },
+    {
+        "nummer": 21,
+        "namn": "Bäverdalen",
+        "farg": "blå",
+        "langdMeter": 1320
+    },
+    {
+        "nummer": 22,
+        "namn": "Fjällräven",
+        "farg": "blå",
+        "langdMeter": 914
+    },
+    {
+        "nummer": 23,
+        "namn": "Illern",
+        "farg": "blå",
+        "langdMeter": 1036
+    },
+    {
+        "nummer": 24,
+        "namn": "Skogsmården",
+        "farg": "blå",
+        "langdMeter": 283
+    },
+    {
+        "nummer": 25,
+        "namn": "Ekorrsvansen",
+        "farg": "blå",
+        "langdMeter": 417
+    },
+    {
+        "nummer": 26,
+        "namn": "Renfållan",
+        "farg": "grön",
+        "langdMeter": 257
+    },
+    {
+        "nummer": 27,
+        "namn": "Familjebacken",
+        "farg": "röd",
+        "langdMeter": 703
+    },
+    {
+        "nummer": 28,
+        "namn": "Älgstråket",
+        "farg": "röd",
+        "langdMeter": 1181
+    },
+    {
+        "nummer": 30,
+        "namn": "Minkspåret",
+        "farg": "röd",
+        "langdMeter": 600
+    },
+    {
+        "nummer": 31,
+        "namn": "Lostupet",
+        "farg": "svart",
+        "langdMeter": 716
+    },
+    {
+        "nummer": 32,
+        "namn": "Snövesslan",
+        "farg": "svart",
+        "langdMeter": 894
+    },
+    {
+        "nummer": 33,
+        "namn": "Trollfallet",
+        "farg": "svart",
+        "langdMeter": 383
+    },
+    {
+        "nummer": 34,
+        "namn": "Grottbranten",
+        "farg": "svart",
+        "langdMeter": 429
+    },
+    {
+        "nummer": 35,
+        "namn": "Ormtungan",
+        "farg": "blå",
+        "langdMeter": 658
+    },
+    {
+        "nummer": 40,
+        "namn": "Blåvingen",
+        "farg": "blå",
+        "langdMeter": 310
+    },
+    {
+        "nummer": 41,
+        "namn": "Kläppen Blue line",
+        "farg": "blå",
+        "langdMeter": 330
+    }
+]

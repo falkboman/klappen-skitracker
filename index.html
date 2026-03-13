@@ -1,0 +1,811 @@
+<!doctype html>
+<html lang="sv">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="theme-color" content="#103D69" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Kläppen SkiTracker" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <title>Kläppen Ski Tracker</title>
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="icon" type="image/png" sizes="96x96" href="/IMG/pwa/favicon-96x96.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/IMG/pwa/apple-touch-icon.png" />
+    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              klappen: {
+                dark: '#103D69',
+                mid: '#1E4F80',
+                light: '#EAF2FB',
+                accent: '#2E6EA8'
+              }
+            },
+            boxShadow: {
+              card: '0 10px 30px rgba(16, 61, 105, 0.12)'
+            }
+          }
+        }
+      };
+    </script>
+    <style>
+      html,
+      body {
+        touch-action: manipulation;
+      }
+
+      @media (pointer: coarse) {
+        input,
+        select,
+        textarea,
+        .ts-wrapper.multi .ts-control input,
+        .ts-wrapper.single .ts-control input {
+          font-size: 16px !important;
+        }
+      }
+
+      .ts-wrapper.multi .ts-control {
+        min-height: 46px;
+        border-radius: 0.75rem;
+        border-color: rgb(203 213 225);
+        background: linear-gradient(180deg, #ffffff, #f8fbff);
+        box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.6);
+      }
+
+      .ts-wrapper.multi .ts-control > div {
+        margin: 4px 4px 4px 0;
+        border-radius: 9999px;
+        border: 1px solid #9ec0e2;
+        background: #eaf2fb;
+        color: #103d69;
+        font-weight: 600;
+        font-size: 0.75rem;
+      }
+
+      .ts-wrapper.multi .ts-control input {
+        color: #103d69;
+      }
+
+      .ts-wrapper.single .ts-control {
+        min-height: 46px;
+        border-radius: 0.75rem;
+        border-color: rgb(203 213 225);
+        background: linear-gradient(180deg, #ffffff, #f8fbff);
+        box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.6);
+        color: #103d69;
+      }
+
+      .ts-wrapper.single .ts-control .item {
+        color: #103d69;
+        font-weight: 600;
+      }
+
+      .ts-wrapper.focus .ts-control {
+        border-color: #2e6ea8;
+        box-shadow: 0 0 0 3px rgba(46, 110, 168, 0.2);
+      }
+
+      .ts-dropdown {
+        border-radius: 0.75rem;
+        border-color: #b9d2ea;
+        box-shadow: 0 14px 30px rgba(16, 61, 105, 0.15);
+        overflow: hidden;
+      }
+
+      .ts-dropdown .option {
+        padding: 10px 12px;
+        color: #1e4f80;
+      }
+
+      .ts-dropdown .option.active,
+      .ts-dropdown .option:hover {
+        background: #eaf2fb;
+        color: #103d69;
+      }
+
+      .ts-dropdown .no-results {
+        color: #64748b;
+      }
+
+      @keyframes gpsSavePulse {
+        0%,
+        100% {
+          background: #1e4f80;
+          box-shadow: 0 0 0 0 rgba(30, 79, 128, 0.22);
+        }
+
+        50% {
+          background: #dc2626;
+          box-shadow: 0 0 0 8px rgba(220, 38, 38, 0.12);
+        }
+      }
+
+      .gps-save-pulse {
+        animation: gpsSavePulse 1.7s ease-in-out infinite;
+      }
+
+      .ts-color-row {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      #mapSelectedPreview:empty {
+        display: none;
+      }
+
+      .recorded-route-badge {
+        width: 100%;
+        min-height: 46px;
+        margin-top: 4px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 0;
+        border-radius: 0.75rem;
+        border: 1px solid rgb(203 213 225);
+        background: linear-gradient(180deg, #ffffff, #f8fbff);
+        box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.6);
+      }
+
+      .recorded-route-chip {
+        margin: 0 0 0 4px;
+        display: inline-flex;
+        align-items: center;
+        max-width: calc(100% - 8px);
+        border-radius: 9999px;
+        border: 1px solid #f5b4b4;
+        background: #fff1f2;
+        color: #9f1239;
+        font-weight: 700;
+        font-size: 0.75rem;
+        line-height: 1;
+        overflow: hidden;
+      }
+
+      .recorded-route-chip-label {
+        padding: 8px 10px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .recorded-route-chip-remove {
+        border: 0;
+        border-left: 1px solid #f5b4b4;
+        background: transparent;
+        color: #9f1239;
+        min-width: 30px;
+        align-self: stretch;
+        font-size: 0.9rem;
+        line-height: 1;
+        cursor: pointer;
+      }
+
+      .recorded-route-chip-remove:hover {
+        background: rgba(190, 24, 93, 0.08);
+      }
+
+      .recorded-route-select.is-locked .ts-wrapper,
+      .recorded-route-select.is-locked select {
+        display: none !important;
+      }
+
+      .dashboard-tabs {
+        display: inline-grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        align-items: stretch;
+        border: 1px solid #d6e4f2;
+        border-radius: 9999px;
+        background: #f8fbff;
+        padding: 0.25rem;
+      }
+
+      .dashboard-tab {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.6rem;
+        min-height: 46px;
+        padding: 0.65rem 1rem;
+        border: 0;
+        background: transparent;
+        color: #4f6478;
+        border-radius: 9999px;
+        transition: background 0.16s ease, color 0.16s ease, box-shadow 0.16s ease;
+      }
+
+      .dashboard-tab.is-active {
+        background: #fff;
+        color: #103d69;
+        box-shadow: 0 8px 18px rgba(16, 61, 105, 0.12);
+      }
+
+      .dashboard-tab-icon {
+        width: 2rem;
+        height: 2rem;
+        display: grid;
+        place-items: center;
+        border-radius: 9999px;
+        background: #eaf2fb;
+        font-size: 0.9rem;
+        color: #2e6ea8;
+      }
+
+      .dashboard-tab.is-active .dashboard-tab-icon {
+        background: #103d69;
+        color: #fff;
+      }
+
+      .dashboard-tab-copy {
+        display: block;
+      }
+
+      .dashboard-tab-title {
+        font-size: 0.9rem;
+        font-weight: 800;
+        line-height: 1;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .dashboard-panel[hidden] {
+        display: none !important;
+      }
+
+      .dashboard-view-switcher {
+        display: flex;
+        justify-content: center;
+      }
+
+      .person-stats-details .person-stats-chevron {
+        transition: transform 160ms ease;
+      }
+
+      .person-stats-details[open] .person-stats-chevron {
+        transform: rotate(180deg);
+      }
+
+      .page-shell {
+        position: relative;
+        min-height: 100vh;
+        overflow-x: hidden;
+        background: #eaf2fb;
+      }
+
+      .page-top-bg {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: clamp(360px, 48vw, 640px);
+        background-image: url('IMG/bg.jpg');
+        background-repeat: no-repeat;
+        background-position: center top;
+        background-size: cover;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .page-top-bg::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: -62px;
+        height: 62px;
+        background-color: #103d69;
+        background-image: url('IMG/ribbon.svg');
+        background-repeat: repeat-x;
+        background-size: auto 62px;
+        background-position: center bottom;
+      }
+
+      .hero-register-wrap {
+        min-height: clamp(300px, 44vw, 520px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding-top: max(1rem, env(safe-area-inset-top));
+        padding-bottom: clamp(28px, 4.5vw, 52px);
+      }
+
+      .home-hero-card {
+        margin-top: 2rem;
+        padding-top: 1.5rem;
+      }
+
+      .home-hero-head {
+        text-align: center;
+        display: grid;
+        justify-items: center;
+        gap: 1rem;
+        padding-top: 0.4rem;
+      }
+
+      .home-hero-badge {
+        width: clamp(4.6rem, 15vw, 5.6rem);
+        aspect-ratio: 1;
+        display: grid;
+        place-items: center;
+        border-radius: 1.25rem;
+        background: #f7fbff;
+        border: 1px solid #d5e4f2;
+        overflow: visible;
+        margin-top: calc(clamp(4.6rem, 15vw, 5.6rem) * -0.75);
+        margin-bottom: 0.35rem;
+      }
+
+      .home-hero-icon {
+        font-size: clamp(1.9rem, 6vw, 2.35rem);
+        color: #103d69;
+      }
+
+      .home-hero-title {
+        font-size: clamp(1.45rem, 3.5vw, 1.9rem);
+        line-height: 1.1;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        color: #103d69;
+      }
+
+      .install-hint-btn {
+        border: 0;
+        background: transparent;
+        color: rgba(191, 219, 254, 0.88);
+        font-size: 0.75rem;
+        line-height: 1.4;
+        cursor: pointer;
+        transition: color 0.15s ease, opacity 0.15s ease;
+      }
+
+      .install-hint-btn:hover {
+        color: #fff;
+      }
+
+      .install-hint-btn:focus-visible {
+        outline: 2px solid rgba(255, 255, 255, 0.75);
+        outline-offset: 3px;
+        border-radius: 0.5rem;
+      }
+
+      @media (max-width: 640px) {
+        .page-top-bg {
+          height: clamp(620px, 155vw, 860px);
+        }
+
+        .hero-register-wrap {
+          min-height: clamp(420px, 120vw, 640px);
+          padding-top: max(2.5rem, calc(env(safe-area-inset-top) + 1.5rem));
+        }
+
+        .home-hero-card {
+          margin-top: 3.5rem;
+          padding-top: 1.9rem;
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-slate-100 text-slate-900">
+    <div class="page-shell">
+      <div class="page-top-bg" aria-hidden="true"></div>
+      <div class="relative z-10">
+        <header class="bg-white/90 backdrop-blur border-b border-blue-100 sticky top-0 z-20">
+          <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
+            <img src="IMG/logo_top.svg" alt="Kläppen" class="h-10 w-auto" />
+            <div class="flex items-center gap-2">
+              <p class="text-sm font-semibold text-klappen-dark hidden sm:block">Ski Tracker</p>
+              <button
+                id="openGroupSwitcherBtn"
+                type="button"
+                class="inline-flex items-center gap-2 rounded-xl border border-blue-200 bg-blue-50 px-3 py-2 text-xs sm:text-sm font-semibold text-klappen-dark hover:bg-blue-100 transition"
+                title="Byt eller skapa sällskap"
+              >
+                <i class="fa-solid fa-users" aria-hidden="true"></i>
+                <span id="groupBadgeName">Välj sällskap</span>
+                <span id="groupBadgeCode" class="rounded-md border border-blue-300 bg-white px-1.5 py-0.5 text-[10px] sm:text-xs">------</span>
+              </button>
+            </div>
+          </div>
+        </header>
+
+      <main class="relative z-10">
+        <section class="max-w-4xl mx-auto px-4 pt-8 sm:pt-10">
+          <div class="hero-register-wrap">
+            <section class="home-hero-card relative w-full mb-8 sm:mb-0 bg-white rounded-2xl p-4 shadow-card border border-blue-100">
+              <a href="gps/index.html" class="absolute top-4 right-4 rounded-xl border border-blue-200 bg-blue-50 px-3 py-2 text-sm font-semibold text-klappen-dark hover:bg-blue-100 transition inline-flex items-center justify-center gap-2">
+                <i class="fa-solid fa-crosshairs" aria-hidden="true"></i>
+                <span>GPS</span>
+              </a>
+              <div class="home-hero-head">
+                <div class="home-hero-badge" aria-hidden="true">
+                  <i class="fa-solid fa-person-skiing home-hero-icon"></i>
+                </div>
+                <h1 class="home-hero-title">Registrera åk</h1>
+                <p class="text-sm text-slate-600 mt-1">Logga snabbt vem som har åkt vilken backe.</p>
+              </div>
+
+              <form id="rideForm" class="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <label class="text-sm font-medium text-slate-700">
+                  Person(er)
+                  <select id="personInput" multiple class="mt-1 w-full rounded-xl border-slate-300 focus:border-klappen-accent focus:ring-klappen-accent"></select>
+                </label>
+
+                <label class="text-sm font-medium text-slate-700">
+                  Backe/Backar
+                  <div id="recordedRouteSelectWrap" class="recorded-route-select">
+                    <div id="recordedRouteBadge" class="recorded-route-badge hidden">
+                      <div class="recorded-route-chip">
+                        <span id="recordedRouteBadgeText" class="recorded-route-chip-label">Inspelad rutt</span>
+                        <button id="recordedRouteClearBtn" type="button" class="recorded-route-chip-remove" aria-label="Ta bort inspelad rutt">×</button>
+                      </div>
+                    </div>
+                    <select id="backInput" multiple class="mt-1 w-full rounded-xl border-slate-300 focus:border-klappen-accent focus:ring-klappen-accent"></select>
+                  </div>
+                </label>
+
+                <label class="text-sm font-medium text-slate-700">
+                  Datum
+                  <input id="dateInput" type="date" class="mt-1 w-full rounded-xl border-slate-300 focus:border-klappen-accent focus:ring-klappen-accent" />
+                </label>
+
+                <div class="sm:col-span-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <button id="openMapBtn" type="button" class="rounded-xl border border-klappen-accent bg-white px-3 py-3 text-sm font-semibold text-klappen-dark hover:bg-blue-50 transition inline-flex items-center justify-center gap-2">
+                    <i class="fa-regular fa-snowflake" aria-hidden="true"></i>
+                    <span>Pistkarta</span>
+                  </button>
+                  <button id="saveRideBtn" class="rounded-xl bg-klappen-mid text-white font-semibold py-3 hover:bg-klappen-dark transition inline-flex items-center justify-center gap-2 disabled:cursor-not-allowed disabled:opacity-80" type="submit">
+                    <i id="saveRideBtnIcon" class="fa-solid fa-person-skiing" aria-hidden="true"></i>
+                    <span id="saveRideBtnLabel">Spara åk</span>
+                  </button>
+                </div>
+              </form>
+              <p id="statusMsg" class="text-sm mt-3"></p>
+            </section>
+          </div>
+        </section>
+
+        <div class="max-w-4xl mx-auto px-4 pb-4">
+          <div class="dashboard-view-switcher mb-4">
+            <div class="dashboard-tabs" role="tablist" aria-label="Startsidans vyer">
+              <button id="overviewTabBtn" type="button" class="dashboard-tab is-active" role="tab" aria-selected="true" aria-controls="overviewPanel">
+                <span class="dashboard-tab-icon"><i class="fa-solid fa-star" aria-hidden="true"></i></span>
+                <span class="dashboard-tab-copy">
+                  <span class="dashboard-tab-title">Statistik</span>
+                </span>
+              </button>
+              <button id="backarTabBtn" type="button" class="dashboard-tab" role="tab" aria-selected="false" aria-controls="backarPanel">
+                <span class="dashboard-tab-icon"><i class="fa-regular fa-map" aria-hidden="true"></i></span>
+                <span class="dashboard-tab-copy">
+                  <span class="dashboard-tab-title">Backar</span>
+                </span>
+              </button>
+            </div>
+          </div>
+
+          <div id="overviewPanel" class="dashboard-panel space-y-4" role="tabpanel" aria-labelledby="overviewTabBtn">
+            <section class="bg-white rounded-2xl p-4 shadow-card border border-blue-100">
+              <h2 class="text-lg font-bold text-klappen-dark">Sällskapets stjärnor</h2>
+              <div id="starsBoard" class="mt-3 grid grid-cols-1 xl:grid-cols-3 gap-3"></div>
+            </section>
+
+            <section class="bg-white rounded-2xl p-4 shadow-card border border-blue-100">
+              <h2 class="text-lg font-bold text-klappen-dark">Total statistik</h2>
+              <div id="totalStats" class="mt-3"></div>
+            </section>
+          </div>
+
+          <div id="backarPanel" class="dashboard-panel" role="tabpanel" aria-labelledby="backarTabBtn" hidden>
+            <section class="bg-white rounded-2xl p-4 shadow-card border border-blue-100">
+              <h2 class="text-lg font-bold text-klappen-dark">Backar</h2>
+              <div class="mt-3 grid grid-cols-1 sm:grid-cols-4 gap-3">
+                <label class="text-sm font-medium">Färg
+                  <select id="filterColor" class="mt-1 w-full rounded-xl border-slate-300"></select>
+                </label>
+                <label class="text-sm font-medium">Sortera
+                  <select id="sortBy" class="mt-1 w-full rounded-xl border-slate-300">
+                    <option value="nummer">Nummer</option>
+                    <option value="namn">Namn</option>
+                    <option value="langd">Längd</option>
+                    <option value="ak_total">Åk totalt</option>
+                    <option value="ak_idag">Åk idag</option>
+                  </select>
+                </label>
+                <label class="text-sm font-medium">Åkstatus
+                  <select id="rideStatus" class="mt-1 w-full rounded-xl border-slate-300">
+                    <option value="all">Alla</option>
+                    <option value="ridden">Åkta</option>
+                    <option value="unridden">Ej åkta</option>
+                    <option value="unridden_today">Ej åkt idag</option>
+                  </select>
+                </label>
+                <label class="text-sm font-medium">Person (åkstatus)
+                  <select id="statusPerson" class="mt-1 w-full rounded-xl border-slate-300"></select>
+                </label>
+              </div>
+              <div id="backarList" class="mt-4 space-y-3"></div>
+            </section>
+          </div>
+        </div>
+      </main>
+
+      <footer class="mt-6 bg-klappen-dark text-white pt-6">
+        <div class="max-w-4xl mx-auto px-4 pb-6 flex flex-col items-center gap-3">
+          <img src="IMG/logo_bottom.svg" alt="Kläppen footer" class="h-16 w-auto" />
+          <p class="text-xs text-blue-100">Kläppen Ski Tracker v1.3</p>
+        </div>
+        <div
+          class="w-full h-[62px]"
+          style="background-color: #103d69; background-image: url('IMG/ribbon.svg'); background-repeat: repeat-x; background-size: auto 62px; background-position: center bottom;"
+          aria-hidden="true"
+        ></div>
+        <div class="w-full h-14 bg-klappen-dark flex items-center justify-center">
+          <button id="installHintBtn" type="button" class="install-hint-btn">Rekommenderas i installerat läge. Klicka för instruktion.</button>
+        </div>
+      </footer>
+      </div>
+    </div>
+
+    <div id="installHintModal" class="hidden fixed inset-0 z-50 bg-slate-950/65 px-4 py-6 flex items-center justify-center">
+      <div class="relative w-full max-w-sm rounded-2xl bg-white p-5 text-center shadow-2xl">
+        <button
+          id="installHintCloseBtn"
+          type="button"
+          class="absolute right-3 top-3 inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-500 hover:bg-slate-100 hover:text-slate-700"
+          aria-label="Stäng"
+        >
+          <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+        </button>
+        <h2 class="text-lg font-bold text-klappen-dark">Installerat läge</h2>
+        <p class="mt-3 text-sm leading-6 text-slate-600">
+          Öppna sidan från hemskärmen för stabilare GPS och enklare användning i backen.
+          I Safari: dela och välj <strong>Lägg till på hemskärmen</strong>.
+          I Chrome: öppna menyn och välj <strong>Installera app</strong>.
+        </p>
+      </div>
+    </div>
+
+    <div id="groupModal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-slate-900/70 p-3 sm:p-6">
+      <div class="mx-auto my-2 sm:my-4 max-w-xl rounded-2xl bg-white shadow-2xl overflow-hidden">
+        <div class="border-b border-slate-200 p-4 flex items-start justify-between gap-3">
+          <div>
+            <p class="text-xl font-bold text-klappen-dark">Sällskap</p>
+            <p class="text-sm text-slate-600">Anslut med kod eller skapa ett nytt sällskap.</p>
+          </div>
+          <button id="groupModalCloseBtn" type="button" class="rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100">
+            Stäng
+          </button>
+        </div>
+
+        <div class="p-4 space-y-4 bg-gradient-to-b from-blue-50 via-white to-slate-50">
+          <section id="groupEditSection" class="rounded-xl border border-blue-200 bg-white p-3 shadow-sm">
+            <div class="flex items-center justify-between gap-2">
+              <p class="text-sm font-semibold text-klappen-dark inline-flex items-center gap-2">
+                <i class="fa-regular fa-snowflake text-klappen-accent" aria-hidden="true"></i>
+                Redigera sällskap
+              </p>
+              <span id="groupEditCodeBadge" class="rounded-md border border-blue-200 bg-blue-50 px-2 py-0.5 text-xs font-semibold text-klappen-dark">------</span>
+            </div>
+            <p id="groupEditHint" class="mt-1 text-xs text-slate-600">Välj först ett sällskap för att kunna redigera.</p>
+
+            <div class="mt-3 rounded-xl border border-blue-100 bg-blue-50/70 p-3">
+              <p class="text-sm font-semibold text-klappen-dark">Byt namn</p>
+              <div class="mt-2 flex flex-col sm:flex-row gap-2">
+                <input
+                  id="renameGroupNameInput"
+                  type="text"
+                  maxlength="40"
+                  placeholder="Nytt namn"
+                  class="w-full rounded-xl border-slate-300 focus:border-klappen-accent focus:ring-klappen-accent"
+                />
+                <button id="renameGroupBtn" type="button" class="rounded-xl bg-klappen-mid px-4 py-2 text-sm font-semibold text-white hover:bg-klappen-dark inline-flex items-center justify-center gap-2">
+                  <i class="fa-solid fa-pen" aria-hidden="true"></i>
+                  <span>Spara namn</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="mt-3 rounded-xl border border-blue-100 bg-blue-50/70 p-3">
+              <p class="text-sm font-semibold text-klappen-dark">Personer i sällskapet</p>
+              <div class="mt-2 grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-2">
+                <input
+                  id="editGroupPersonInput"
+                  type="text"
+                  maxlength="40"
+                  placeholder="Ny person"
+                  class="w-full rounded-xl border-slate-300 focus:border-klappen-accent focus:ring-klappen-accent"
+                />
+                <button id="addEditGroupPersonBtn" type="button" class="rounded-xl border border-blue-300 bg-white px-4 py-2 text-sm font-semibold text-klappen-dark hover:bg-blue-100 inline-flex items-center justify-center gap-2">
+                  <i class="fa-solid fa-user-plus" aria-hidden="true"></i>
+                  <span>Lägg till</span>
+                </button>
+              </div>
+              <div id="editGroupPersonsList" class="mt-2 rounded-xl border border-blue-200 bg-white p-2 min-h-[48px] flex flex-wrap items-center gap-2">
+                <p class="text-xs text-slate-500">Inga personer i sällskapet ännu.</p>
+              </div>
+              <button id="saveEditGroupPersonsBtn" type="button" class="mt-2 rounded-xl bg-klappen-mid px-4 py-2 text-sm font-semibold text-white hover:bg-klappen-dark inline-flex items-center justify-center gap-2">
+                <i class="fa-solid fa-floppy-disk" aria-hidden="true"></i>
+                <span>Spara personer</span>
+              </button>
+            </div>
+          </section>
+
+          <section class="rounded-xl border border-cyan-200 bg-gradient-to-br from-cyan-50 via-blue-50 to-white p-3 shadow-sm">
+            <p class="text-sm font-semibold text-klappen-dark inline-flex items-center gap-2">
+              <i class="fa-solid fa-person-skiing text-klappen-accent" aria-hidden="true"></i>
+              Byt / Skapa sällskap
+            </p>
+            <p class="mt-1 text-xs text-slate-600">Vill du ansluta till ett annat sällskap eller skapa ett nytt?</p>
+            <button id="openGroupWelcomeBtn" type="button" class="mt-2 rounded-xl bg-klappen-mid px-4 py-2 text-sm font-semibold text-white hover:bg-klappen-dark inline-flex items-center justify-center gap-2">
+              <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+              <span>Öppna Byt / Skapa</span>
+            </button>
+          </section>
+
+          <p id="groupEditStatus" class="text-sm"></p>
+        </div>
+      </div>
+    </div>
+
+    <div id="groupWelcomeModal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-slate-900/70 p-3 sm:p-6">
+      <div class="mx-auto my-2 sm:my-4 max-w-2xl rounded-2xl bg-white shadow-2xl overflow-hidden">
+        <div class="border-b border-slate-200 p-4 flex items-start justify-between gap-3">
+          <div>
+            <p class="text-2xl font-black text-klappen-dark">Välkommen till Kläppen Ski Tracker</p>
+            <p class="text-sm text-slate-600">Vill du ansluta till ett befintligt sällskap eller skapa ett nytt?</p>
+          </div>
+          <button id="groupWelcomeCloseBtn" type="button" class="rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100">
+            Stäng
+          </button>
+        </div>
+
+        <div class="p-4 space-y-4 bg-gradient-to-b from-blue-50 via-white to-slate-50">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <button id="welcomeShowJoinBtn" type="button" class="rounded-2xl border border-blue-200 bg-blue-50 p-4 text-left hover:bg-blue-100 transition">
+              <p class="text-sm font-bold text-klappen-dark inline-flex items-center gap-2">
+                <i class="fa-solid fa-link text-klappen-accent" aria-hidden="true"></i>
+                Anslut till sällskap
+              </p>
+              <p class="mt-1 text-xs text-slate-600">Har du en kod? Anslut direkt.</p>
+            </button>
+            <button id="welcomeShowCreateBtn" type="button" class="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-left hover:bg-emerald-100 transition">
+              <p class="text-sm font-bold text-emerald-900 inline-flex items-center gap-2">
+                <i class="fa-solid fa-users text-emerald-700" aria-hidden="true"></i>
+                Skapa nytt sällskap
+              </p>
+              <p class="mt-1 text-xs text-slate-600">Starta ett nytt sällskap med dina personer.</p>
+            </button>
+          </div>
+
+          <section id="welcomeJoinPanel" class="rounded-xl border border-blue-100 bg-blue-50 p-4">
+            <p class="text-sm font-semibold text-klappen-dark">Anslut till sällskap</p>
+            <div class="mt-2 flex flex-col sm:flex-row gap-2">
+              <input
+                id="joinGroupCodeInput"
+                type="text"
+                maxlength="6"
+                placeholder="Ange kod, t.ex. AB12CD"
+                class="w-full rounded-xl border-slate-300 uppercase tracking-widest focus:border-klappen-accent focus:ring-klappen-accent"
+              />
+              <button id="joinGroupBtn" type="button" class="rounded-xl bg-klappen-mid px-4 py-2 text-sm font-semibold text-white hover:bg-klappen-dark inline-flex items-center justify-center gap-2">
+                <i class="fa-solid fa-link" aria-hidden="true"></i>
+                <span>Anslut</span>
+              </button>
+            </div>
+          </section>
+
+          <section id="welcomeCreatePanel" class="hidden rounded-xl border border-emerald-100 bg-emerald-50 p-4">
+            <p class="text-sm font-semibold text-emerald-900">Skapa nytt sällskap</p>
+            <div class="mt-2 grid gap-2">
+              <input
+                id="createGroupNameInput"
+                type="text"
+                maxlength="40"
+                placeholder="Sällskapets namn"
+                class="w-full rounded-xl border-slate-300 focus:border-klappen-accent focus:ring-klappen-accent"
+              />
+              <div class="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-2">
+                <input
+                  id="createGroupPersonInput"
+                  type="text"
+                  maxlength="40"
+                  placeholder="Ny person"
+                  class="w-full rounded-xl border-slate-300 focus:border-klappen-accent focus:ring-klappen-accent"
+                />
+                <button id="addCreateGroupPersonBtn" type="button" class="rounded-xl border border-emerald-300 bg-white px-4 py-2 text-sm font-semibold text-emerald-800 hover:bg-emerald-100 inline-flex items-center justify-center gap-2">
+                  <i class="fa-solid fa-user-plus" aria-hidden="true"></i>
+                  <span>Lägg till</span>
+                </button>
+              </div>
+              <div id="createGroupPersonsList" class="rounded-xl border border-emerald-200 bg-white p-2 min-h-[48px] flex flex-wrap items-center gap-2">
+                <p class="text-xs text-slate-500">Inga personer tillagda ännu.</p>
+              </div>
+              <button id="createGroupBtn" type="button" class="rounded-xl bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700 inline-flex items-center justify-center gap-2">
+                <i class="fa-solid fa-check" aria-hidden="true"></i>
+                Skapa
+              </button>
+            </div>
+          </section>
+
+          <p id="groupWelcomeStatus" class="text-sm"></p>
+        </div>
+      </div>
+    </div>
+
+    <div id="mapModal" class="hidden fixed inset-0 z-40 bg-slate-900/70 p-2 sm:p-6">
+      <div class="mx-auto h-full max-w-6xl rounded-2xl bg-white shadow-2xl flex flex-col overflow-hidden">
+        <div class="border-b border-slate-200 p-3 sm:p-4 flex items-center justify-between gap-3">
+          <div>
+            <p class="text-xl sm:text-2xl font-bold text-klappen-dark">Pistkarta</p>
+          </div>
+          <button id="closeMapBtn" type="button" class="rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100">Stäng</button>
+        </div>
+
+        <div id="adminZonePanel" class="hidden p-3 sm:p-4 border-b border-amber-200 bg-amber-50">
+          <p class="text-sm font-semibold text-amber-900">Adminläge: klicka i kartan för att sätta position för vald backe</p>
+          <div class="mt-2 grid grid-cols-1 sm:grid-cols-[1fr_auto_auto_auto_auto] gap-2 items-center">
+            <select id="adminBackSelect" class="rounded-xl border-slate-300 text-sm"></select>
+            <button id="adminModeToggleBtn" type="button" class="rounded-xl border border-amber-400 px-3 py-2 text-sm font-semibold text-amber-900 hover:bg-amber-100">Läge: Placera</button>
+            <button id="adminRemoveZoneBtn" type="button" class="rounded-xl border border-red-300 px-3 py-2 text-sm font-semibold text-red-700 hover:bg-red-50">Ta bort zon</button>
+            <button id="adminSaveZonesBtn" type="button" class="rounded-xl bg-amber-600 px-3 py-2 text-sm font-semibold text-white hover:bg-amber-700">Spara zoner</button>
+            <button id="adminExportZonesBtn" type="button" class="rounded-xl border border-amber-400 px-3 py-2 text-sm font-semibold text-amber-900 hover:bg-amber-100">Exportera JSON</button>
+          </div>
+          <p id="adminZoneStatus" class="mt-2 text-xs text-amber-900"></p>
+        </div>
+
+        <div id="mapViewport" class="relative flex-1 overflow-hidden bg-slate-100 touch-none">
+          <div id="mapStage" class="absolute left-0 top-0 origin-top-left select-none cursor-grab">
+            <img id="mapImage" src="IMG/pistkarta.jpeg" alt="Pistkarta" class="block max-w-none pointer-events-none" draggable="false" />
+            <div id="mapMarkers" class="absolute inset-0"></div>
+          </div>
+          <div id="mapEmptyState" class="hidden absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-xl bg-white/95 px-4 py-3 text-sm font-medium text-slate-700 shadow-lg border border-slate-200">
+            Inga zoner finns ännu. Använd adminläge för att sätta zoner.
+          </div>
+          <div class="absolute right-3 top-3 z-20 flex flex-col gap-2">
+            <button id="mapZoomInBtn" type="button" class="h-11 w-11 shrink-0 rounded-xl border border-slate-300 bg-white/95 text-sm font-semibold shadow" aria-label="Zooma in" title="Zooma in">
+              <i class="fa-solid fa-magnifying-glass-plus" aria-hidden="true"></i>
+            </button>
+            <button id="mapZoomOutBtn" type="button" class="h-11 w-11 shrink-0 rounded-xl border border-slate-300 bg-white/95 text-sm font-semibold shadow" aria-label="Zooma ut" title="Zooma ut">
+              <i class="fa-solid fa-magnifying-glass-minus" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="border-t border-slate-200 p-3 sm:p-4 space-y-2 sm:space-y-3">
+          <div id="mapSelectedPreview" class="flex flex-wrap items-center gap-1.5"></div>
+          <button id="mapDoneBtn" type="button" class="w-full rounded-xl bg-klappen-mid px-3 py-2 text-sm font-semibold text-white hover:bg-klappen-dark">Klar</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+    <script src="app-loader.php"></script>
+    <script>
+      (() => {
+        const openBtn = document.getElementById('installHintBtn');
+        const modal = document.getElementById('installHintModal');
+        const closeBtn = document.getElementById('installHintCloseBtn');
+        if (!openBtn || !modal || !closeBtn) return;
+
+        const closeModal = () => modal.classList.add('hidden');
+        const openModal = () => modal.classList.remove('hidden');
+
+        openBtn.addEventListener('click', openModal);
+        closeBtn.addEventListener('click', closeModal);
+        modal.addEventListener('click', (event) => {
+          if (event.target === modal) closeModal();
+        });
+        document.addEventListener('keydown', (event) => {
+          if (event.key === 'Escape') closeModal();
+        });
+      })();
+    </script>
+  </body>
+</html>

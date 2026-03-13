@@ -1,0 +1,254 @@
+[
+  {
+    "backNummer": 1,
+    "x": 0.226628,
+    "y": 0.797613,
+    "labelOffsetX": 0,
+    "labelOffsetY": 0
+  },
+  {
+    "backNummer": 2,
+    "x": 0.249403,
+    "y": 0.76356,
+    "labelOffsetX": 0,
+    "labelOffsetY": 0
+  },
+  {
+    "backNummer": 3,
+    "x": 0.266421,
+    "y": 0.714781,
+    "labelOffsetX": 0,
+    "labelOffsetY": 0
+  },
+  {
+    "backNummer": 4,
+    "x": 0.32949,
+    "y": 0.71386,
+    "labelOffsetX": 0,
+    "labelOffsetY": 0
+  },
+  {
+    "backNummer": 5,
+    "x": 0.163461,
+    "y": 0.716545,
+    "labelOffsetX": 0,
+    "labelOffsetY": 0
+  },
+  {
+    "backNummer": 6,
+    "x": 0.180654,
+    "y": 0.749771,
+    "labelOffsetX": 0,
+    "labelOffsetY": 0
+  },
+  {
+    "backNummer": 7,
+    "x": 0.20635,
+    "y": 0.566401,
+    "labelOffsetX": 0,
+    "labelOffsetY": 0
+  },
+  {
+    "backNummer": 8,
+    "x": 0.195472,
+    "y": 0.534398,
+    "labelOffsetX": 0,
+    "labelOffsetY": 0
+  },
+  {
+    "backNummer": 9,
+    "x": 0.307982,
+    "y": 0.378958,
+    "labelOffsetX": 0,
+    "labelOffsetY": 0
+  },
+  {
+    "backNummer": 10,
+    "x": 0.275348,
+    "y": 0.34867,
+    "labelOffsetX": 0,
+    "labelOffsetY": 0
+  },
+  {
+    "backNummer": 11,
+    "x": 0.374182,
+    "y": 0.346956,
+    "labelOffsetX": 0,
+    "labelOffsetY": 0
+  },
+  {
+    "backNummer": 12,
+    "x": 0.768663,
+    "y": 0.428175,
+    "labelOffsetX": 0,
+    "labelOffsetY": 0
+  },
+  {
+    "backNummer": 13,
+    "x": 0.641059,
+    "y": 0.2542,
+    "labelOffsetX": 0,
+    "labelOffsetY": 0
+  },
+  {
+    "backNummer": 14,
+    "x": 0.590712,
+    "y": 0.266969,
+    "labelOffsetX": 0,
+    "labelOffsetY": 0
+  },
+  {
+    "backNummer": 15,
+    "x": 0.696615,
+    "y": 0.187164,
+    "labelOffsetX": 0,
+    "labelOffsetY": 0
+  },
+  {
+    "backNummer": 16,
+    "x": 0.460503,
+    "y": 0.201529,
+    "labelOffsetX": 0,
+    "labelOffsetY": 0
+  },
+  {
+    "backNummer": 17,
+    "x": 0.56901,
+    "y": 0.235047,
+    "labelOffsetX": 0,
+    "labelOffsetY": 0
+  },
+  {
+    "backNummer": 18,
+    "x": 0.306949,
+    "y": 0.537815,
+    "labelOffsetX": 0,
+    "labelOffsetY": 0
+  },
+  {
+    "backNummer": 19,
+    "x": 0.344184,
+    "y": 0.512769,
+    "labelOffsetX": 0,
+    "labelOffsetY": 0
+  },
+  {
+    "backNummer": 20,
+    "x": 0.544705,
+    "y": 0.803259,
+    "labelOffsetX": 0,
+    "labelOffsetY": 0
+  },
+  {
+    "backNummer": 21,
+    "x": 0.437066,
+    "y": 0.412214,
+    "labelOffsetX": 0,
+    "labelOffsetY": 0
+  },
+  {
+    "backNummer": 22,
+    "x": 0.65408,
+    "y": 0.139281,
+    "labelOffsetX": 0,
+    "labelOffsetY": 0
+  },
+  {
+    "backNummer": 23,
+    "x": 0.490054,
+    "y": 0.150947,
+    "labelOffsetX": 0,
+    "labelOffsetY": 0
+  },
+  {
+    "backNummer": 24,
+    "x": 0.387587,
+    "y": 0.206317,
+    "labelOffsetX": 0,
+    "labelOffsetY": 0
+  },
+  {
+    "backNummer": 25,
+    "x": 0.538628,
+    "y": 0.161626,
+    "labelOffsetX": 0,
+    "labelOffsetY": 0
+  },
+  {
+    "backNummer": 26,
+    "x": 0.56901,
+    "y": 0.836778,
+    "labelOffsetX": 0,
+    "labelOffsetY": 0
+  },
+  {
+    "backNummer": 27,
+    "x": 0.394531,
+    "y": 0.520749,
+    "labelOffsetX": 0,
+    "labelOffsetY": 0
+  },
+  {
+    "backNummer": 28,
+    "x": 0.467448,
+    "y": 0.573421,
+    "labelOffsetX": 0,
+    "labelOffsetY": 0
+  },
+  {
+    "backNummer": 30,
+    "x": 0.363281,
+    "y": 0.263777,
+    "labelOffsetX": 0,
+    "labelOffsetY": 0
+  },
+  {
+    "backNummer": 31,
+    "x": 0.529948,
+    "y": 0.525538,
+    "labelOffsetX": 0,
+    "labelOffsetY": 0
+  },
+  {
+    "backNummer": 32,
+    "x": 0.450087,
+    "y": 0.364331,
+    "labelOffsetX": 0,
+    "labelOffsetY": 0
+  },
+  {
+    "backNummer": 33,
+    "x": 0.643663,
+    "y": 0.370716,
+    "labelOffsetX": 0,
+    "labelOffsetY": 0
+  },
+  {
+    "backNummer": 34,
+    "x": 0.691406,
+    "y": 0.34837,
+    "labelOffsetX": 0,
+    "labelOffsetY": 0
+  },
+  {
+    "backNummer": 35,
+    "x": 0.277344,
+    "y": 0.496808,
+    "labelOffsetX": 0,
+    "labelOffsetY": 0
+  },
+  {
+    "backNummer": 40,
+    "x": 0.706163,
+    "y": 0.678763,
+    "labelOffsetX": 0,
+    "labelOffsetY": 0
+  },
+  {
+    "backNummer": 41,
+    "x": 0.753139,
+    "y": 0.707321,
+    "labelOffsetX": 0,
+    "labelOffsetY": 0
+  }
+]
