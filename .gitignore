@@ -1,0 +1,12 @@
+.DS_Store
+
+.vscode/
+
+*.log
+
+Data/gps_tracks/
+Data/groups/
+Data/rides.json
+Data/stats.json
+Data/gps_back_runs.json
+Data/gps_lift_runs.json
