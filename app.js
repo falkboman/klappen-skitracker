@@ -1670,10 +1670,10 @@ function renderStarsBoard() {
   }).join('');
   const starRules = getAchievementRuleDefinitions();
   const starRulesCard = `
-    <article class="rounded-2xl bg-slate-100/80 p-3 sm:p-4 xl:col-span-3">
+    <article class="rounded-2xl bg-slate-100/80 p-3 sm:p-4 md:col-span-2">
       <div class="rounded-3xl bg-white border border-slate-100 p-5 shadow-[0_8px_24px_rgba(15,23,42,0.06)]">
         <h3 class="text-lg font-bold text-klappen-dark">Hur får man stjärnor?</h3>
-        <div class="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+        <div class="mt-4 grid gap-3 sm:grid-cols-2">
         ${starRules.map((rule) => `
           <div class="border-l-4 border-amber-400 pl-3">
             <p class="text-sm font-semibold text-slate-800">${formatAchievementLabel(rule.key)}</p>
@@ -1684,7 +1684,7 @@ function renderStarsBoard() {
       </div>
     </article>`;
   const teamCard = `
-    <article class="rounded-2xl bg-slate-100/80 p-3 sm:p-4 sm:col-span-2 xl:col-span-3">
+    <article class="rounded-2xl bg-slate-100/80 p-3 sm:p-4 md:col-span-2">
       <div class="rounded-3xl bg-white border border-slate-100 p-5 shadow-[0_8px_24px_rgba(15,23,42,0.06)]">
         <h3 class="text-lg font-bold text-klappen-dark">Gemensamma mål</h3>
         <p class="mt-3 text-3xl font-bold text-amber-500">${'★'.repeat(totals.teamStars)}<span class="text-slate-300">${'☆'.repeat(Math.max(0, teamMaxStars - totals.teamStars))}</span></p>
